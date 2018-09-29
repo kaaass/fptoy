@@ -1,4 +1,4 @@
-from functools import partial
+from inspect import isfunction
 
 
 def currying(f):
@@ -7,18 +7,15 @@ def currying(f):
     :param f:
     :return:
     """
-    if isinstance(f, partial):
-        # noinspection PyUnresolvedReferences
-        arg_count = f.func.__code__.co_argcount
-    else:
-        arg_count = f.__code__.co_argcount
+    if isfunction(f):
+        f = (f, f.__code__.co_argcount, ())
 
-    def wrapper_func(x):
-        func = partial(f, x)
-        if len(func.args) == arg_count:
-            return func()
+    def wrapper_func(*args):
+        args = f[2] + tuple(args)
+        if len(args) >= f[1]:
+            return f[0](*args)
         else:
-            return currying(func)
+            return currying((f[0], f[1], args))
 
     return wrapper_func
 
