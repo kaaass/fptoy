@@ -54,6 +54,21 @@ Church operation multiply
 """
 multiply = currying(lambda a, b, s, z: a(b(s))(z))
 
+"""
+ω combinator
+"""
+omega = lambda x: x(x)
+
+"""
+Ω combinator
+"""
+Omega = lambda x: omega(omega(x))
+
+"""
+Y combinator
+"""
+Y = lambda f: (lambda x: f(x(x)))((lambda x: f(lambda *args: x(x)(*args))))
+
 if __name__ == '__main__':
     num_plus = currying(lambda x, y: x + y)
     print(num_plus)
@@ -66,3 +81,6 @@ if __name__ == '__main__':
     print(dechurch(five))
     print(dechurch(plus(three, five)))
     print(dechurch(multiply(three, five)))
+
+    fibonacii = Y(lambda f: lambda n: 1 if n <= 1 else f(n - 1) + f(n - 2))
+    print(fibonacii(12))
