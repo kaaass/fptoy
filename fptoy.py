@@ -20,8 +20,49 @@ def currying(f):
     return wrapper_func
 
 
+# Church zero
+zero = currying(lambda s, z: z)
+
+
+def church(n: int):
+    """
+    Convert integer to church number
+    :param n:
+    :return:
+    """
+    if n < 1:
+        return zero
+    return currying(lambda s, z: s(church(n - 1)(s)(z)))
+
+
+def dechurch(c) -> int:
+    """
+    Convert church number to integer
+    :param c:
+    :return:
+    """
+    return c(lambda x: x + 1, 0)
+
+
+"""
+Church operation plus
+"""
+plus = currying(lambda a, b, s, z: a(s)(b(s)(z)))
+
+"""
+Church operation multiply
+"""
+multiply = currying(lambda a, b, s, z: a(b(s))(z))
+
 if __name__ == '__main__':
-    plus = currying(lambda x, y: x + y)
-    print(plus)
-    print(plus(3))
-    print(plus(3)(4))
+    num_plus = currying(lambda x, y: x + y)
+    print(num_plus)
+    print(num_plus(3))
+    print(num_plus(3)(4))
+
+    three = church(3)
+    five = church(5)
+    print(three)
+    print(dechurch(five))
+    print(dechurch(plus(three, five)))
+    print(dechurch(multiply(three, five)))
