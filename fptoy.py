@@ -102,9 +102,9 @@ if __name__ == '__main__':
     three = church(3)
     five = church(5)
     print(three)
-    print(dechurch(five))
-    print(dechurch(plus(three, five)))
-    print(dechurch(multiply(three, five)))
+    print(unchurch(five))
+    print(unchurch(plus(three, five)))
+    print(unchurch(multiply(three, five)))
 
     fibonacii = Y(lambda f: lambda n: 1 if n <= 1 else f(n - 1) + f(n - 2))
     print(fibonacii(12))
