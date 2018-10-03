@@ -35,13 +35,13 @@ def church(n: int):
     return currying(lambda s, z: s(church(n - 1)(s)(z)))
 
 
-def dechurch(c) -> int:
+def unchurch(c) -> int:
     """
     Convert church number to integer
     :param c:
     :return:
     """
-    return c(lambda x: x + 1, 0)
+    return c(lambda x: x + 1)(0)
 
 
 """
@@ -53,6 +53,10 @@ plus = currying(lambda a, b, s, z: a(s)(b(s)(z)))
 Church operation multiply
 """
 multiply = currying(lambda a, b, s, z: a(b(s))(z))
+
+"""
+Church operation multiply
+"""
 
 """
 ω combinator
