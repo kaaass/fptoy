@@ -69,6 +69,26 @@ Y combinator
 """
 Y = lambda f: (lambda x: f(x(x)))((lambda x: f(lambda *args: x(x)(*args))))
 
+"""
+SKI combinator
+"""
+S = currying(lambda x, y, z: x(z)(y(z)))
+K = currying(lambda x, y: x)
+I = lambda x: x  # Equal to S(K)(K)
+
+"""
+B, C, K, W system
+"""
+B = currying(lambda x, y, z: x(y(z)))  # Equal to S(K(S))(K)
+C = currying(lambda x, y, z: x(z)(y))  # Equal to S(S(K(S(K(S))(K)))(S))(K(K))
+# K is same as it in SKI combinator
+W = currying(lambda x, y: x(y)(y))
+
+"""
+Chris Barker's Iota combinator
+"""
+iota = lambda x: x(S)(K)
+
 if __name__ == '__main__':
     num_plus = currying(lambda x, y: x + y)
     print(num_plus)
@@ -84,3 +104,12 @@ if __name__ == '__main__':
 
     fibonacii = Y(lambda f: lambda n: 1 if n <= 1 else f(n - 1) + f(n - 2))
     print(fibonacii(12))
+
+    print(I(3))
+    print(S(K)(K)(2333))
+
+    print(K(233)(666))
+    print(iota(iota(iota(iota)))(233)(666))
+
+    print(S(num_plus, num_plus(2), 1))
+    print(iota(iota(iota(iota(iota))))(num_plus)(num_plus(2))(1))
