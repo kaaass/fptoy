@@ -45,18 +45,34 @@ def unchurch(c) -> int:
 
 
 """
-Church operation plus
+Church bool
+"""
+c_true = currying(lambda a, b: a)
+c_false = currying(lambda a, b: b)
+
+"""
+Church operations
 """
 plus = currying(lambda a, b, s, z: a(s)(b(s)(z)))
-
-"""
-Church operation multiply
-"""
 multiply = currying(lambda a, b, s, z: a(b(s))(z))
+power = currying(lambda f, g: g(f))
 
-"""
-Church operation multiply
-"""
+c_and = currying(lambda p, q: p(q)(p))  # Or p(q)(c_false)
+c_or = currying(lambda p, q: p(p)(q))  # Or p(c_true)(q)
+c_not = lambda p: p(c_false)(c_true)
+c_xor = currying(lambda a, b: a(c_not)(b))
+if_then_else = currying(lambda p, x, y: p(x)(y))
+is_zero = lambda n: n(lambda x: c_false)(c_true)
+
+
+def unchurch_bool(c) -> bool:
+    """
+    Convert church number to integer
+    :param c:
+    :return:
+    """
+    return if_then_else(c)(True)(False)
+
 
 """
 ω combinator
@@ -77,7 +93,7 @@ Y = lambda f: (lambda x: f(x(x)))((lambda x: f(lambda *args: x(x)(*args))))
 SKI combinator
 """
 S = currying(lambda x, y, z: x(z)(y(z)))
-K = currying(lambda x, y: x)
+K = currying(lambda x, y: x)  # Church True
 I = lambda x: x  # Equal to S(K)(K)
 
 """
@@ -105,6 +121,9 @@ if __name__ == '__main__':
     print(unchurch(five))
     print(unchurch(plus(three, five)))
     print(unchurch(multiply(three, five)))
+
+    print(unchurch_bool(c_not(c_false)))
+    print(unchurch_bool(c_and(c_true, c_true)))
 
     fibonacii = Y(lambda f: lambda n: 1 if n <= 1 else f(n - 1) + f(n - 2))
     print(fibonacii(12))
